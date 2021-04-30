@@ -9,10 +9,27 @@
     <input type="hidden" id="bathymetry_id" value="{{model.id}}" />
     {{ super() }}
     <!-- add a leaflet map -->
-    <div id="map" style="height: 420px; margin-top: 2em; margin-bottom: 2em;"></div>
+    <div class="tab">
+      <button class="tablinks" id="mapButton" onclick="openTab(event, 'map_view')">Map view</button>
+      <button class="tablinks" id="csButton" onclick="openTab(event, 'cs_view')">Cross-section view</button>
+    </div>
+    <!-- Tab content -->
+    <div id="map_view" class="tabcontent">
+    <span class="info-text">
+        Map view<span class="info fa-info-circle fa-sm" title="Check if your bathymetry covers the site. You should see a red line passing over the stream at your selected site"></span>
+    </span>
+    <div id="map" style="height: 520px; margin-top: 2em; margin-bottom: 2em;"></div>
+    </div>
+
+    <div id="cs_view" class="tabcontent">
+    <span class="info-text">
+        Cross-section view<span class="info fa-info-circle fa-sm" title="Check if your cross-section spand the correct levels from left-bank to right-bank, whilst looking downstream."></span>
+    </span>
     <figure class="highcharts-figure">
         <div id="cross_section"></div>
     </figure>
+    </div>
+
 
 {% endblock %}
 {% block tail %}

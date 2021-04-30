@@ -1,4 +1,9 @@
 $(document).ready(function () {
+    // simulate a click
+    document.getElementById("mapButton").click();
+});
+
+function plotData(callback){
     const id = $('input#bathymetry_id').val();
     $.ajax({
         type: 'GET',
@@ -7,13 +12,40 @@ $(document).ready(function () {
         dataType: 'json',
         success: function(data) {
             console.log(data);
-            map_bathymetry(data);
-            cross_section(data);
+            callback(data);
         },
 
         error: function() {console.log("Something went wrong")}
     });
-});
+}
+
+function openTab(evt, tabName) {
+  // Declare all variables
+  var i, tabcontent, tablinks;
+
+  // Get all elements with class="tabcontent" and hide them
+  tabcontent = document.getElementsByClassName("tabcontent");
+  for (i = 0; i < tabcontent.length; i++) {
+    tabcontent[i].style.display = "none";
+  }
+
+  // Get all elements with class="tablinks" and remove the class "active"
+  tablinks = document.getElementsByClassName("tablinks");
+  for (i = 0; i < tablinks.length; i++) {
+    tablinks[i].className = tablinks[i].className.replace(" active", "");
+  }
+
+  // Show the current tab, and add an "active" class to the button that opened the tab
+  document.getElementById(tabName).style.display = "block";
+  evt.currentTarget.className += " active";
+  // run ajax call and callback
+  if (tabName === "map_view") {
+    callback = map_bathymetry;
+  } else {
+    callback = cross_section;
+  }
+  plotData(callback);
+}
 
 cross_section = function(data) {
     // add a highchart of the bathymetry profile
@@ -35,9 +67,6 @@ cross_section = function(data) {
             labels: {
                 format: '{value} m'
             },
-//            accessibility: {
-//                rangeDescription: 'Range: 0 to 80 m.'
-//            },
             maxPadding: 0.05,
             showLastLabel: true
         },
@@ -48,9 +77,6 @@ cross_section = function(data) {
             labels: {
                 format: '{value} m'
             },
-//            accessibility: {
-//                rangeDescription: 'Range: -90°C to 20°C.'
-//            },
             lineWidth: 2
         },
         legend: {

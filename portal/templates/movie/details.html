@@ -47,19 +47,37 @@
     {% endif %}
     </table>
   {% endblock %}
-
-  {% if model.status.name != 'MOVIE_STATUS_NEW' and model.status.name != 'MOVIE_STATUS_ERROR' %}
-    <hr/>
-    <h4>Lens corrected snapshot</h4>
+    <div class="tab">
+      <button class="tablinks" id="snapshotButton" onclick="openTab(event, 'snapshot_view')">Lens corrected snapshot</button>
+      <button class="tablinks" id="PIVButton" onclick="openTab(event, 'piv_view')">PIV results</button>
+    </div>
+    <!-- Tab content -->
+    <div id="snapshot_view" class="tabcontent">
+    {% if model.status.name != 'MOVIE_STATUS_NEW' and model.status.name != 'MOVIE_STATUS_ERROR' %}
+      <span class="info-text">
+        Lens corrected snapshot<span class="info fa-info-circle fa-sm" title="The figure shows the first lens corrected frame from the movie"></span>
+      </span>
     <img src="/api/visualize/get_snapshot/{{model.id}}"  style="width:100%;" />
-  {% endif %}
+      {% else %}
+      <p>Snapshot not yet available</p>
+    {% endif %}
+
+    </div>
+
+    <div id="piv_view" class="tabcontent">
+    <span class="info-text">
+        PIV results<span class="info fa-info-circle fa-sm" title="The figure below shows the median estimated velocities as yellow colored arrows. Hover over them to see the velocity."></span>
+    </span>
   {% if model.status.name == 'MOVIE_STATUS_FINISHED' %}
     <hr/>
-    <h4>PIV results</h4>
+<!--    <h4>PIV results</h4>-->
+    <div class="container" style="overflow: scroll">
     <figure class="highcharts-figure">
-        <div id="piv-plot"></div>
+        <div id="piv-plot" style="overflow: scroll"></div>
     </figure>
+    </div>
   {% endif %}
+    </div>
 {% endblock %}
 
 {% block tail %}
@@ -71,7 +89,7 @@
     <script src="https://code.highcharts.com/modules/exporting.js"></script>
     <script src="https://code.highcharts.com/modules/export-data.js"></script>
     <script src="https://code.highcharts.com/modules/accessibility.js"></script>
-    <script src="{{ url_for('static', filename='visualize.js') }}"></script>
+    <script src="{{ url_for('static', filename='movie_details.js') }}"></script>
     <script>
         $(function() {
             $("#piv-plot").plotPIV({{ get_value(model, 'id') }}, {{ "`{}`".format(get_value(model, 'file_name')) }});

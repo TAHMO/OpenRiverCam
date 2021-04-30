@@ -29,6 +29,10 @@
   </ul>
   {% endblock %}
   {% block edit_form %}
+    <span class="info-text">
+        Edit movie analysis<span class="info fa-info-circle fa-sm" title="Provide or modify the time stamp of the movie and read the water level"></span>
+    </span>
+
     <form action="{{ action or '' }}" method="POST" role="form" class="admin-form" enctype="multipart/form-data">
     <fieldset>
         {{ details_columns  }}
@@ -42,6 +46,7 @@
             {% endif %}
         </div>
         {{ lib.render_form_buttons(return_url, extra(), False) }}
+
     </fieldset>
     </form>
   {% endblock %}

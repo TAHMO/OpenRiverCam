@@ -29,60 +29,91 @@
   </ul>
   {% endblock %}
   {% block edit_form %}
+    <span class="info-text">
+        Edit bathymetry<span class="info fa-info-circle fa-sm" title="Edit the bathymetry by supplying X, Y, Z coordinates"></span>
+    </span>
     <form action="{{ action or '' }}" id="bathymetry-form" method="POST" role="form" class="admin-form" enctype="multipart/form-data">
     <fieldset>
         {{ details_columns  }}
         {{ lib.render_form_fields(form, form_opts=form_opts) }}
         <hr />
-        <h4>Coordinates</h4>
-        <input type="hidden" id="bathymetry_id" value="{{model.id}}" />
-        <table id="coordinates">
-            <tr>
-                <th style="text-align: center;">X</th>
-                <th style="text-align: center;">Y</th>
-                <th style="text-align: center;">Z</th>
-            </tr>
-            {% for coordinate in model.coordinates %}
-            <tr>
-                <td><input name="coordinate_x_{{loop.index - 1}}" style="width: 120px" value="{{coordinate.x}}" /></td>
-                <td><input name="coordinate_y_{{loop.index - 1}}" style="width: 120px" value="{{coordinate.y}}" /></td>
-                <td><input name="coordinate_z_{{loop.index - 1}}" style="width: 120px" value="{{coordinate.z}}" /></td>
-            </tr>
-            {% endfor %}
-            {% if model.coordinates|length == 0 %}
-            <tr>
-                <td><input name="coordinate_x_1" style="width: 120px" /></td>
-                <td><input name="coordinate_y_1" style="width: 120px" /></td>
-                <td><input name="coordinate_z_1" style="width: 120px" /></td>
-            </tr>
-            <tr>
-                <td><input name="coordinate_x_2" style="width: 120px" /></td>
-                <td><input name="coordinate_y_2" style="width: 120px" /></td>
-                <td><input name="coordinate_z_2" style="width: 120px" /></td>
-            </tr>
-            <tr>
-                <td><input name="coordinate_x_3" style="width: 120px" /></td>
-                <td><input name="coordinate_y_3" style="width: 120px" /></td>
-                <td><input name="coordinate_z_3" style="width: 120px" /></td>
-            </tr>
-            {% endif %}
-        </table>
-        <p>
-            <a id="add" style="color: #089de3; cursor: pointer;">Add another coordinate</a>
-        </p>
-        <hr />
-      <h4>Insert CSV</h4>
-        <textarea id="csv_area" name="csv_area" value="Check" rows="10" cols="80"
-                  placeholder='EPSG:4326&#10;5.9137, 50.807056, 136.7&#10;5.9139, 50.807061, 135.6&#10;...insert more coordinates in x, y, z format&#10;...&#10;5.9141, 50.807073, 135.5'></textarea>
-        <hr />
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10 submit-row">
-                <input name="_continue_editing" type="submit" class="btn btn-primary" value="{{ _gettext('Save') }}" />
-                <input name="_store_csv" id="_store_csv" type="button" class="btn btn-primary" value="Store CSV")
-                }}" />
-                <a href="{{ return_url }}" class="btn btn-danger" role="button">{{ _gettext('Cancel') }}</a>
+        <div class="tab">
+          <button class="tablinks" type="button" id="listButton" onclick="openTab(event, 'list_view')">Edit coordinates</button>
+          <button class="tablinks" type="button" id="csvButton" onclick="openTab(event, 'csv_view')">Insert CSV</button>
+        </div>
+        <div id="list_view" class="tabcontent">
+            <span class="info-text">
+                Edit coordinates<span class="info fa-info-circle fa-sm" title="Manually supply X, Y, Z coordinates in the site's valid Coordinate Reference System"></span>
+            </span>
+            <input type="hidden" id="bathymetry_id" value="{{model.id}}" />
+            <table id="coordinates">
+                <tr>
+                    <th style="text-align: center;">X</th>
+                    <th style="text-align: center;">Y</th>
+                    <th style="text-align: center;">Z</th>
+                </tr>
+                {% for coordinate in model.coordinates %}
+                <tr>
+                    <td><input name="coordinate_x_{{loop.index - 1}}" style="width: 120px" value="{{coordinate.x}}" /></td>
+                    <td><input name="coordinate_y_{{loop.index - 1}}" style="width: 120px" value="{{coordinate.y}}" /></td>
+                    <td><input name="coordinate_z_{{loop.index - 1}}" style="width: 120px" value="{{coordinate.z}}" /></td>
+                </tr>
+                {% endfor %}
+                {% if model.coordinates|length == 0 %}
+                <tr>
+                    <td><input name="coordinate_x_1" style="width: 120px" /></td>
+                    <td><input name="coordinate_y_1" style="width: 120px" /></td>
+                    <td><input name="coordinate_z_1" style="width: 120px" /></td>
+                </tr>
+                <tr>
+                    <td><input name="coordinate_x_2" style="width: 120px" /></td>
+                    <td><input name="coordinate_y_2" style="width: 120px" /></td>
+                    <td><input name="coordinate_z_2" style="width: 120px" /></td>
+                </tr>
+                <tr>
+                    <td><input name="coordinate_x_3" style="width: 120px" /></td>
+                    <td><input name="coordinate_y_3" style="width: 120px" /></td>
+                    <td><input name="coordinate_z_3" style="width: 120px" /></td>
+                </tr>
+                {% endif %}
+            </table>
+            <p>
+                <a id="add" style="color: #089de3; cursor: pointer;">Add another coordinate</a>
+            </p>
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10 submit-row">
+                    <input name="_continue_editing" type="submit" class="btn btn-primary" value="{{ _gettext('Save') }}" />
+<!--                    <input name="_store_csv" id="_store_csv" type="button" class="btn btn-primary" value="Store CSV"/>-->
+                    <a href="{{ return_url }}" class="btn btn-danger" role="button">{{ _gettext('Cancel') }}</a>
+                </div>
+            </div>
+
+        </div>
+        <div id="csv_view" class="tabcontent">
+            <span class="info-text">
+                Insert CSV<span class="info fa-info-circle fa-sm" title="Type, or copy-paste a valid comma-separated-value formatted text below in the correct format."></span>
+            <br>
+            <div class="container" style="border:1px;margin:5px 0;padding:3px;overflow:scroll;">
+               <textarea id="csv_area" name="csv_area" value="Check" rows="10" cols="50"
+                          placeholder='EPSG:4326&#10;5.9137, 50.807056, 136.7&#10;5.9139, 50.807061, 135.6&#10;...insert more coordinates in x, y, z format&#10;...&#10;5.9141, 50.807073, 135.5'>
+               </textarea>
+            </div>
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10 submit-row">
+<!--                    <input name="_continue_editing" type="submit" class="btn btn-primary" value="{{ _gettext('Save') }}" />-->
+                    <input name="_store_csv" id="_store_csv" type="button" class="btn btn-primary" value="{{ _gettext('Save') }}"/>
+                    <a href="{{ return_url }}" class="btn btn-danger" role="button">{{ _gettext('Cancel') }}</a>
+                </div>
             </div>
         </div>
+
+<!--        <div class="form-group">-->
+<!--            <div class="col-md-offset-2 col-md-10 submit-row">-->
+<!--                <input name="_continue_editing" type="submit" class="btn btn-primary" value="{{ _gettext('Save') }}" />-->
+<!--                <input name="_store_csv" id="_store_csv" type="button" class="btn btn-primary" value="Store CSV"/>-->
+<!--                <a href="{{ return_url }}" class="btn btn-danger" role="button">{{ _gettext('Cancel') }}</a>-->
+<!--            </div>-->
+<!--        </div>-->
     </fieldset>
     </form>
   {% endblock %}

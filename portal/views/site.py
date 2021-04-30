@@ -11,7 +11,6 @@ class SiteView(UserModelView):
         Site.position_crs,
     )
 
-    print(f"Check site name {str(Site.name)}")
     column_labels = {
         "id": "Site ID",
         "name": "Site name",

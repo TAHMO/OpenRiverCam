@@ -6,9 +6,13 @@
 {% block body %}
     {{ super() }}
     <hr/>
-    <h4>Rating curve</h4>
+    <span class="info-text">
+        Rating curve<span class="info fa-info-circle fa-sm" title="Investigate and edit the rating curve by hovering and clicking on rating points.
+The uncertainty band are very conservative, as all uncertainties work are assumed
+to be entirely correlated."></span>
+    </span>
     <input type="hidden" id="ratingcurve_id" value="{{model.id}}" />
-    <figure class="highcharts-figure">
+    <figure class="highcharts-figure" style="width: 700px; overflow: hidden;">
         <div id="rating-curve"></div>
     </figure>
 
@@ -17,6 +21,7 @@
 
     {{ super() }}
     <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/highcharts-more.js"></script>
     <script src="https://code.highcharts.com/modules/vector.js"></script>
     <script src="https://code.highcharts.com/modules/exporting.js"></script>
     <script src="https://code.highcharts.com/modules/export-data.js"></script>
@@ -28,7 +33,9 @@
         field_b = document.getElementById('b');
         field_h0 = document.getElementById('h0');
         var ratingpoints = []
+        var boxplot_data = [];  // 6-length arrays where the first value is the x-coordinate, and last 5 values the low to high quantiles
         {% for row in model.ratingpoints %}
+            // collect data for scatter plot
             ratingpoints.push({
                 x: {{ row.movie.actual_water_level }},
                 y: {{ row.movie.discharge_q50 }},
@@ -36,13 +43,23 @@
                 include: {{ 'true' if row.include else 'false' }}
                 // TODO: add an "include"  boolean in the datamodel for rating points.
             });
+        // collect the data for the quantile plots
+            boxplot_data.push([
+                {{ row.movie.actual_water_level }},
+                {{ row.movie.discharge_q05 }},
+                {{ row.movie.discharge_q25 }},
+                {{ row.movie.discharge_q50 }},
+                {{ row.movie.discharge_q75 }},
+                {{ row.movie.discharge_q95 }},
+            ]);
         {% endfor %}
+
         var siteId = {{ model.ratingpoints[0].movie.config.camera.site.id }}
         var name = "{{ model.ratingpoints[0].movie.config.camera.site.name }}"
         // below, all plotting functions are defined
         function getChart(){
             Chart = Highcharts.chart('rating-curve', {
-                chart: {
+                chart: {scrollbars: {enable: false}
                 },
                 title: {
                     text: 'Rating Curve for ' + name
@@ -130,6 +147,13 @@
 
                 series: [
                     {
+                        type: 'boxplot',
+                        name: 'Rating uncertainty',
+                        color: 'rgba(70, 90, 255, 1.0)',
+                        data: boxplot_data,
+                        turboThreshold: 0, // Required for datasets covering more than 1k points.
+                    },
+                    {
                         tooltip: {
                             useHTML: true,
                             headerFormat: '<b>{series.name}</b><br>',
@@ -147,7 +171,7 @@
                         color: 'rgba(255, 70, 90, 1.0)',
                         data: ratingpoints,
                         turboThreshold: 0, // Required for datasets covering more than 1k points.
-                    }
+                    },
                 ],
                 exporting: {
                     buttons: {
@@ -160,7 +184,7 @@
             return Chart;
         }
         function updateColorPoints() {
-            var series = Chart.series[0]
+            var series = Chart.series[1]
             for ( var i = 0; i < series.points.length; i++ ) {
                 point = series.points[i]
                 if ( point.include == true ) {
@@ -195,9 +219,9 @@
             data = hrange.map(function(e, i) {
                           return [e, pars.a*Math.pow(Math.max(e-pars.h0, 0), pars.b)];
                       })
-            if ( Chart.series.length > 1 ) {
+            if ( Chart.series.length > 2 ) {
                 // replace data of existing graph
-                Chart.series[1].setData(data);
+                Chart.series[2].setData(data);
             }
             else {
                 Chart.addSeries({
@@ -225,7 +249,7 @@
         }
         function updateRatingCurve () {
             // read samples and their current state from the graph
-            scatter = Chart.series[0].data;
+            scatter = Chart.series[1].data;
             var samples = {water_level: [], discharge: [], include: []};
             for (var i = 0; i < scatter.length; i++) {
                 if (scatter[i].include == true) {
@@ -261,7 +285,7 @@
             const form = this;
             const ratingpoints = [];
 
-            scatter = Chart.series[0].data;
+            scatter = Chart.series[1].data;
             for (var i = 0; i < scatter.length; i++) {
                 ratingpoints.push({ movie_id: scatter[i].name, include: !!scatter[i].include });
             }

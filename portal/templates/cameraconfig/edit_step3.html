@@ -3,17 +3,22 @@
 {% block body %}
   {{ super() }}
   {% block edit_form %}
+    <span class="info-text">PIV Window size<span class="info fa-info-circle fa-sm"
+        title="Provide a size of the interrogation window for the Particle Image Velocimetry analysis. Note that this is
+        currently in pixels. The size in meters is your selected resolution (e.g. 0.01m) multiplied by the value
+        given here. In a later update, we will support providing this value in unit meters."></span>
+    </span>
     {% call lib.form_tag(action=action) %}
-        <div style="position: relative">
-            <img id="snapshot-aoi" src="/api/visualize/get_projected_snapshot/{{movie.id}}"  style="width:100%;" />
-            <canvas id="snapshot-aoi-canvas" width="100%" height="100%" style="width: 100%; height:100%; position: absolute; left: 0; top: 0;"></canvas>
-        </div>
         {{ lib.render_form_fields(form, form_opts=form_opts) }}
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10 submit-row">
                 <input name="_continue_editing" type="submit" class="btn btn-primary" value="{{ _gettext('Save') }}" />
                 <a href="{{ return_url }}" class="btn btn-danger" role="button">{{ _gettext('Cancel') }}</a>
             </div>
+        </div>
+        <div style="position: relative">
+            <img id="snapshot-aoi" src="/api/visualize/get_projected_snapshot/{{movie.id}}"  style="width:100%;" />
+            <canvas id="snapshot-aoi-canvas" width="100%" height="100%" style="width: 100%; height:100%; position: absolute; left: 0; top: 0;"></canvas>
         </div>
     {% endcall %}
   {% endblock %}
@@ -37,7 +42,8 @@
                 context.clearRect(0, 0, canvas.width, canvas.height);
                 context.save();
                 context.beginPath();
-                context.lineWidth = 2;
+                context.lineWidth = 4;
+                context.strokeStyle = "#FF0000";
                 context.strokeRect(left, top, size, size);
                 context.stroke();
                 context.fill();

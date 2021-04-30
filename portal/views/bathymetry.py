@@ -10,12 +10,22 @@ class BathymetryView(UserModelView):
         Bathymetry.timestamp
     )
     form_columns = ("site", Bathymetry.timestamp)
+
     form_args = {
         "site": {
             "query_factory": lambda: Site.query.filter_by(
                 user_id=current_user.id
             )
         }
+    }
+    column_labels = {
+        "site": "Site name",
+        "timestamp": "Time stamp",
+    }
+
+    column_descriptions = {
+        "site": "Name of the site as provided in your site setup",
+        "timestamp": "Time of measurement of the bathymetry cross section",
     }
 
     create_template = "bathymetry/create.html"

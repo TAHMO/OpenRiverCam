@@ -8,7 +8,16 @@
 
 {% endblock %}
 {% block body %}
-    {{ super() }}
+    {% block navlinks %}
+      {{ super() }}
+    {% endblock %}
+    {% block create_form %}
+    <span class="info-text">
+        Create site<span class="info fa-info-circle fa-sm" title="Create a site by providing a name and zooming into the location on the map or manually typing its longitude
+        and latitude coordinates."></span>
+    </span>
+      {{ super() }}
+    {% endblock %}
     <!-- add a leaflet map -->
     <div id="map" style="height: 420px; margin-top: 2em; margin-bottom: 2em;"></div> <!--; margin-top: 2em; margin-bottom: 2em;"></div>-->
 {% endblock %}

@@ -3,6 +3,13 @@
 {% block body %}
   {{ super() }}
   {% block edit_form %}
+  <span class="info-text">Select time span and sample movie<span class="info fa-info-circle fa-sm"
+                  title="Provide a start and end time for the camera configuration. This is needed in case you change camera
+        configurations after a certain period of time, e.g. when you install a new camera or change the settings,
+        position or angle of a camera. Provide a movie in which ground control points are clearly visible and
+        marked."></span>
+  </span>
+
     {% call lib.form_tag(action=action) %}
         {{ lib.render_form_fields(form, form_opts=form_opts) }}
         <div class="form-group">

@@ -102,6 +102,8 @@ inactive, because you have installed a new camera, of a new type on that given s
    shots, and another for afternoon shots. This can be useful in case lighting conditions in different parts of days
    negatively affect the results from either one of the cameras.
 
+.. _bathymetry:
+
 Bathymetry
 ----------
 Similar to selecting a camera for a site, you also need to provide a bathymetry for that site. You may be familiar
@@ -288,8 +290,6 @@ In the next configuration step, you are required to provide the following inform
   - the coordinates (X, Y and height) of the position of the lens, as measured in the coordinate reference system you
     have used throughout your entire survey, whether RTK or dumpy spirit level.
 
-TODO: ANIMATION
-
 
 .. note:: it is very important that all coordinates you use throughout the camera and bathymetry configurations are
    *in the same coordinate reference system* (CRS), and that this is a coordinate system in meters (not latitude
@@ -297,14 +297,4 @@ TODO: ANIMATION
    the CRS of your site, by using the Free and Open Source Software package QGIS. To obtain QGIS please go to
    `http://www.qgis.org/ <http://www.qgis.org/>`_. A further explanation of the required GIS manipulations is out of
    scope of this manual.
-
-
-
-.. _bathymetry:
-
-Cross sections bathymetry
--------------------------
-
-TODO
-
 

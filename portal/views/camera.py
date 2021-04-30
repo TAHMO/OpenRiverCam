@@ -41,6 +41,10 @@ class CameraConfigView(UserModelView):
         CameraConfig.movie_setting_resolution,
         CameraConfig.movie_setting_fps,
     )
+    column_labels = {
+        "aoi_window_size": "Window size [pixels]"
+
+    }
     column_filters = [FilterCameraConfigBySite(column=None, name="Site")]
     form_create_rules = ("camera",)
     form_extra_fields = {

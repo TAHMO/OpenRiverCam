@@ -20,6 +20,13 @@
   {% endblock %}
 
   {% block create_form %}
+    <span class="info-text">
+        Create bathymetry<span class="info fa-info-circle fa-sm" title="Create a new bathymetry cross section by
+            selecting an existing site name and by choosing a valid time stamp when the bathymetry was measured. After
+            making a new bathymetry cross section, click on the 'Edit' symbol next to the new entry to edit the cross
+            section points."></span>
+    </span>
+
     {% call lib.form_tag(action=action) %}
         {{ lib.render_form_fields(form, form_opts=form_opts) }}
         <div class="form-group">

@@ -20,6 +20,11 @@
   {% endblock %}
 
   {% block create_form %}
+  <span class="info-text">Create new configuration<span class="info fa-info-circle fa-sm"
+                  title="Select for which combination of Site and Camera type you wish to make a
+                         new camera configuration. If your Site and Camera type combination is not
+                         yet available, then please go to 'Setup' - 'Cameras on sites'."></span>
+  </span>
     {% call lib.form_tag(action=action) %}
         {{ lib.render_form_fields(form, form_opts=form_opts) }}
         <div class="form-group">

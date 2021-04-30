@@ -1,0 +1,14 @@
+{% extends 'admin/model/create.html' %}
+{% block body %}
+    {% block navlinks %}
+      {{ super() }}
+    {% endblock %}
+    {% block create_form %}
+    <span class="info-text">
+        Create movie analysis<span class="info fa-info-circle fa-sm" title="Create a new movie analysis by uploading a movie file
+        and providing a time stamp for that file. After uploading
+        you will be able to provide a water level with the movie."></span>
+    </span>
+      {{ super() }}
+    {% endblock %}
+{% endblock %}

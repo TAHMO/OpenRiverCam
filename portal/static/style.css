@@ -1,3 +1,71 @@
+.container {
+    max-width: inherit;
+}
+.highcharts-container {
+    overflow: scroll !important;
+}
+
 nav.navbar {
     background-color: steelblue!important;
+}
+
+.navbar-nav .nav-link.active {
+    font-weight-bold;
+}
+
+.info-text {
+    font-size: 20px;
+    color: Dodgerblue;
+    position: relative;
+    line-height: 40px;
+}
+
+.info {
+    data-toggle: "tooltip";
+    display: inline-block;
+    font: normal normal normal 14px/1 FontAwesome;
+    font-size: 20px;
+    text-rendering: auto;
+    right: 1;
+    color: Dodgerblue;
+    margin-left: 10px;
+}
+.info:before {
+    content: "\f05a";
+}
+
+/* Style the tab */
+.tab {
+  overflow: hidden;
+  border: 1px solid #ccc;
+  background-color: #f1f1f1;
+}
+
+/* Style the buttons that are used to open the tab content */
+.tab button {
+  background-color: inherit;
+  float: left;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 14px 16px;
+  transition: 0.3s;
+}
+
+/* Change background color of buttons on hover */
+.tab button:hover {
+  background-color: #ddd;
+}
+
+/* Create an active/current tablink class */
+.tab button.active {
+  background-color: #ccc;
+}
+
+/* Style the tab content */
+.tabcontent {
+  display: none;
+  padding: 6px 12px;
+  border: 1px solid #ccc;
+  border-top: none;
 }
